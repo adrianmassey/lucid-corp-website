@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lucid Corp — Sustainable Plastic: The Future of Packaging</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════
+   RESET & CHROME
+═══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green:       #2d7a38;
+  --green-light: #4caf50;
+  --green-bg:    #f0f7f0;
+  --red:         #e53935;
+  --dark:        #0d0d0d;
+  --text:        #111111;
+  --muted:       #555555;
+  --border:      #dddddd;
+  --white:       #ffffff;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  background: #000;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ─── STAGE ─── */
+#stage {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+#viewport {
+  position: relative;
+  width: 100%;
+  max-width: calc(100vh * 16 / 9);
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #fff;
+  /* Slides are designed at 1600×900; scale everything with this ratio */
+  font-size: min(1.1vw, 1.95vh);
+}
+
+/* ─── SLIDE BASE ─── */
+.slide {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  transform: scale(1.025);
+  transition: opacity 650ms cubic-bezier(.4,0,.2,1), transform 650ms cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+  will-change: opacity, transform;
+  overflow: hidden;
+}
+.slide.active  { opacity: 1; transform: scale(1); pointer-events: auto; z-index: 2; }
+.slide.exit-l  { opacity: 0; transform: scale(.975) translateX(-2%); z-index: 1; }
+.slide.exit-r  { opacity: 0; transform: scale(.975) translateX(2%);  z-index: 1; }
+
+/* ─── LUCID LOGO (top-left watermark) ─── */
+.slide-logo {
+  position: absolute;
+  top: 3.5%;
+  left: 3.5%;
+  z-index: 10;
+  height: 5%;
+}
+.slide-logo img { height: 100%; width: auto; }
+
+/* ─── TYPOGRAPHY ─── */
+h1 { font-size: 3.2em; font-weight: 800; line-height: 1.1; letter-spacing: -.02em; }
+h2 { font-size: 2em;   font-weight: 700; line-height: 1.2; }
+h3 { font-size: 1.4em; font-weight: 700; line-height: 1.3; }
+h4 { font-size: 1.1em; font-weight: 700; }
+p  { font-size: 1em;   font-weight: 400; line-height: 1.55; }
+small { font-size: .8em; }
+
+.green { color: var(--green); }
+
+/* ─── NAVIGATION CHROME ─── */
+.nav-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 50; width: 4em; height: 4em; border-radius: 50%; border: none;
+  background: rgba(255,255,255,.15); backdrop-filter: blur(8px);
+  color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .3s, background .2s, transform .2s;
+}
+.nav-btn svg { width: 2em; height: 2em; }
+#btn-prev { left: 1.5em; }
+#btn-next { right: 1.5em; }
+#viewport:hover .nav-btn { opacity: 1; }
+.nav-btn:hover  { background: rgba(255,255,255,.3); transform: translateY(-50%) scale(1.08); }
+.nav-btn:active { transform: translateY(-50%) scale(.95); }
+.nav-btn:disabled { opacity: 0 !important; }
+
+#bar {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 5em;
+  display: flex; align-items: center; justify-content: center; gap: 1.5em;
+  background: linear-gradient(to top, rgba(0,0,0,.5) 0%, transparent 100%);
+  z-index: 40; opacity: 0; transition: opacity .3s;
+}
+#viewport:hover #bar { opacity: 1; }
+.dot {
+  width: .7em; height: .7em; border-radius: 50%; background: rgba(255,255,255,.4);
+  border: none; cursor: pointer; transition: background .25s, transform .25s; padding: 0;
+}
+.dot.active { background: #fff; transform: scale(1.4); }
+.dot:hover:not(.active) { background: rgba(255,255,255,.7); }
+
+#counter {
+  position: absolute; right: 6em; bottom: 1.5em;
+  font-size: .9em; color: rgba(255,255,255,.7); font-weight: 500; letter-spacing: .05em;
+}
+
+#topbar {
+  position: absolute; top: 0; left: 0; right: 0; height: 4em;
+  display: flex; align-items: center; justify-content: flex-end; gap: .8em; padding: 0 1.2em;
+  background: linear-gradient(to bottom, rgba(0,0,0,.4) 0%, transparent 100%);
+  z-index: 40; opacity: 0; transition: opacity .3s;
+}
+#viewport:hover #topbar { opacity: 1; }
+.icon-btn {
+  width: 3em; height: 3em; border-radius: .7em; border: none;
+  background: rgba(255,255,255,.15); backdrop-filter: blur(6px);
+  color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .15s;
+}
+.icon-btn:hover  { background: rgba(255,255,255,.28); }
+.icon-btn:active { transform: scale(.92); }
+.icon-btn svg { width: 1.5em; height: 1.5em; }
+
+#progress {
+  position: absolute; bottom: 0; left: 0; height: 3px;
+  background: var(--green-light); z-index: 50; transition: width .5s ease;
+}
+
+#hint {
+  position: absolute; bottom: 5.5em; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,.6); backdrop-filter: blur(8px);
+  color: rgba(255,255,255,.85); font-size: .9em; padding: .5em 1.3em;
+  border-radius: 2em; letter-spacing: .08em; z-index: 60;
+  animation: hintFade 4s forwards; pointer-events: none;
+}
+@keyframes hintFade {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  15%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════
+   SLIDE 1 — TITLE
+═══════════════════════════════════════════════ */
+#s1 {
+  background: url("assets/Hero Images/hero-bg2.png") center/cover no-repeat;
+}
+#s1::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.1) 60%, transparent 100%);
+}
+#s1 .s1-content {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 6% 5% 5%;
+}
+#s1 .s1-logo { height: 3.8em; margin-bottom: 1.4em; }
+#s1 h1 { font-size: 3.6em; color: #fff; font-weight: 800; margin-bottom: .3em; }
+#s1 .s1-sub { font-size: 1.3em; color: rgba(255,255,255,.9); font-weight: 400; margin-bottom: 1.4em; }
+#s1 .s1-quote {
+  font-size: 1.05em; color: rgba(255,255,255,.85); font-weight: 400;
+  max-width: 24em; line-height: 1.5;
+}
+#s1 .s1-partner {
+  position: absolute; bottom: 5%; right: 4%;
+  background: rgba(255,255,255,.97);
+  border-radius: .8em; padding: .7em 1.5em;
+  display: flex; align-items: center; gap: .5em;
+}
+#s1 .s1-partner .sobeys-badge {
+  font-size: 1.5em; font-weight: 800; color: #00843d;
+  letter-spacing: -.01em;
+}
+#s1 .s1-partner .sobeys-leaf {
+  width: 1.6em; height: 1.6em;
+  background: #00843d; border-radius: 50% 0 50% 0;
+  display: inline-block; margin-left: .2em;
+}
+
+/* ═══════════════════════════════════════════════
+   SLIDE 2 — FOUNDED & TIMELINE
+═══════════════════════════════════════════════ */
+#s2 { background: #fff; }
+#s2 .s2-body {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; padding: 2% 4% 0;
+}
+#s2 .s2-top { text-align: center; padding-top: 1.5em; margin-bottom: .6em; }
+#s2 .s2-top h1 { font-size: 2.8em; }
+#s2 .s2-top p  { font-size: 1.1em; color: var(--muted); margin-top: .2em; }
+
+#s2 .s2-founders {
+  display: flex; justify-content: center; gap: 4em; margin: .8em 0;
+}
+#s2 .founder {
+  display: flex; align-items: center; gap: 1em;
+}
+#s2 .founder-avatar {
+  width: 4em; height: 4em; border-radius: 50%;
+  background: #e0e0e0; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1.1em; color: #666;
+  border: 2px solid #ccc; flex-shrink: 0;
+}
+#s2 .founder-info h4 { font-size: 1em; font-weight: 700; margin-bottom: .1em; }
+#s2 .founder-info p  { font-size: .85em; color: var(--muted); }
+
+#s2 .s2-tagline {
+  text-align: center; font-size: .9em; color: var(--muted);
+  border-top: 1px solid #eee; border-bottom: 1px solid #eee;
+  padding: .5em 2em; margin: .4em 0;
+}
+
+#s2 .s2-facilities {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2em;
+  flex: 1; margin-bottom: .4em;
+}
+.facility-card {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1em; align-items: start;
+  border: 1px solid var(--border); border-radius: .8em; padding: 1em;
+}
+.facility-card img { width: 100%; height: 8em; object-fit: contain; border-radius: .4em; background: #f8f8f8; }
+.facility-card .fc-title { font-size: 1.1em; font-weight: 700; margin-bottom: .5em; }
+.facility-card ul { list-style: none; padding: 0; }
+.facility-card ul li {
+  font-size: .78em; color: var(--muted); padding: .2em 0;
+  padding-left: 1em; position: relative;
+}
+.facility-card ul li::before {
+  content: '•'; position: absolute; left: 0; color: var(--green);
+}
+
+#s2 .s2-timeline {
+  flex-shrink: 0;
+}
+.timeline-banner {
+  background: var(--green); color: #fff;
+  text-align: center; font-weight: 700; font-size: 1em;
+  padding: .45em; margin-bottom: .5em;
+}
+.timeline-track {
+  position: relative; display: flex; align-items: flex-start;
+  padding: 0 1em; padding-bottom: .8em;
+}
+.timeline-track::before {
+  content: '';
+  position: absolute; top: .55em; left: 3em; right: 3em; height: 2px;
+  background: var(--green);
+}
+.tl-item {
+  flex: 1; position: relative; text-align: center;
+}
+.tl-dot {
+  width: 1.1em; height: 1.1em; border-radius: 50%;
+  background: var(--green); border: 2px solid #fff;
+  box-shadow: 0 0 0 2px var(--green);
+  margin: 0 auto .5em; position: relative; z-index: 1;
+}
+.tl-label { font-weight: 700; font-size: .72em; color: var(--green); margin-bottom: .15em; }
+.tl-desc  { font-size: .68em; color: var(--muted); line-height: 1.3; }
+
+/* ═══════════════════════════════════════════════
+   SLIDE 3 — MARKET
+═══════════════════════════════════════════════ */
+#s3 { background: #fff; }
+#s3 .s3-body {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  padding: 2.5% 4%;
+}
+#s3 h1 { text-align: center; font-size: 2.2em; margin-bottom: .7em; }
+#s3 .s3-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: .6em; flex: 1; margin-bottom: .8em;
+}
+#s3 .s3-grid .big { grid-row: 1 / 3; }
+#s3 .s3-grid img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: .5em;
+  display: block;
+}
+#s3 .s3-retailers {
+  text-align: center; padding-top: .6em;
+  border-top: 1px solid #eee;
+}
+#s3 .s3-retailers p { font-size: .85em; color: var(--muted); margin-bottom: .5em; }
+#s3 .retailer-logos {
+  display: flex; justify-content: center; align-items: center; gap: 1em;
+  flex-wrap: wrap;
+}
+.retailer-badge {
+  padding: .3em .9em; border-radius: .4em;
+  font-weight: 800; font-size: .85em; white-space: nowrap;
+}
+.rb-walmart  { background: #0071ce; color: #fff; }
+.rb-loblaws  { background: #e31837; color: #fff; }
+.rb-sobeys   { background: #00843d; color: #fff; }
+.rb-costco   { background: #005daa; color: #fff; }
+.rb-metro    { background: #1a1a1a; color: #fff; }
+.rb-aldi     { background: #00529b; color: #fff; }
+
+/* ═══════════════════════════════════════════════
+   SLIDE 4 — SEGMENTS WE OFFER
+═══════════════════════════════════════════════ */
+#s4 { background: #fff; }
+#s4 .s4-body {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  padding: 2% 4%;
+}
+#s4 h1 { text-align: center; font-size: 2.5em; font-weight: 700; margin-bottom: .6em; padding-top: .5em; }
+.seg-row { margin-bottom: .6em; }
+.seg-label {
+  text-align: center; font-size: .9em; font-weight: 600; color: var(--muted);
+  margin-bottom: .4em; letter-spacing: .04em;
+}
+.seg-items {
+  display: flex; gap: .6em; justify-content: center;
+}
+.seg-item {
+  flex: 1; max-width: 14%;
+  aspect-ratio: 4/3;
+  border-radius: .5em; overflow: hidden;
+  background: #f8f8f8;
+}
+.seg-item img { width: 100%; height: 100%; object-fit: cover; }
+.seg-item.wide { max-width: 22%; }
+.seg-item.tall { aspect-ratio: 3/4; }
+
+/* ═══════════════════════════════════════════════
+   SLIDE 5 — GDR WITH PRODUCTS
+═══════════════════════════════════════════════ */
+#s5 { background: #fff; }
+#s5 .s5-body {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  padding: 2.5% 4%;
+}
+#s5 .s5-header { text-align: center; margin-bottom: .7em; }
+#s5 .s5-header h1 { font-size: 2.2em; }
+#s5 .s5-header p  { font-size: .95em; color: var(--muted); margin-top: .3em; }
+
+#s5 .s5-main {
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: 2em; flex: 1;
+}
+.gdr-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: .5em;
+}
+.gdr-card {
+  background: #f5f5f5; border-radius: .5em; padding: .6em .7em;
+  border: 1px solid #e8e8e8;
+}
+.gdr-card.active-gdr { background: #fff; border: 1.5px solid #222; }
+.gdr-card h4 { font-size: .85em; font-weight: 800; margin-bottom: .2em; color: var(--text); }
+.gdr-card p  { font-size: .7em; color: var(--muted); line-height: 1.35; }
+
+.gdr-photo { border-radius: .5em; overflow: hidden; }
+.gdr-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.gdr-not-bar {
+  margin-top: .5em;
+  background: #1a1a1a; border-radius: .4em; padding: .4em .8em;
+  display: flex; align-items: center; gap: 1em;
+}
+.gdr-not-bar .label {
+  font-size: .75em; font-weight: 700; color: #fff; white-space: nowrap;
+}
+.gdr-not-items { display: flex; gap: 1.5em; }
+.gdr-not-item h4 { font-size: .7em; font-weight: 700; color: rgba(255,255,255,.9); }
+.gdr-not-item p  { font-size: .6em; color: rgba(255,255,255,.6); }
+
+#s5 .photo-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: .5em;
+}
+#s5 .photo-grid img {
+  width: 100%; height: 100%; object-fit: cover;
+  border-radius: .5em; display: block; background: #f0f0f0;
+}
+#s5 .photo-grid .p-wide { grid-column: 1 / 3; }
+
+/* ═══════════════════════════════════════════════
+   SLIDE 6 — GDR WITH TRAY
+═══════════════════════════════════════════════ */
+#s6 { background: #fff; }
+#s6 .s6-body {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  padding: 2.5% 4%;
+}
+#s6 .s6-header { text-align: center; margin-bottom: .6em; }
+#s6 .s6-header h1 { font-size: 2.2em; }
+#s6 .s6-header p  { font-size: .95em; color: var(--muted); margin-top: .3em; }
+#s6 .s6-main {
+  flex: 1; display: grid;
+  grid-template-columns: 1fr 2.2fr 1fr;
+  gap: 1em; align-items: center;
+}
+.gdr-side { display: flex; flex-direction: column; gap: .6em; }
+.gdr-side-card {
+  border: 1.5px solid #222; border-radius: .5em; padding: .55em .7em;
+}
+.gdr-side-card h4 { font-size: .85em; font-weight: 800; margin-bottom: .15em; }
+.gdr-side-card p  { font-size: .7em; color: var(--muted); line-height: 1.3; }
+#s6 .tray-center {
+  display: flex; align-items: center; justify-content: center;
+}
+#s6 .tray-center img {
+  width: 100%; max-height: 60%; object-fit: contain;
+  border-radius: .6em;
+}
+#s6 .s6-notbar {
+  margin-top: .5em;
+  background: #1a1a1a; border-radius: .4em; padding: .4em .8em;
+  display: flex; align-items: center; gap: 1em;
+}
+#s6 .s6-notbar .label { font-size: .75em; font-weight: 700; color: #fff; white-space: nowrap; }
+#s6 .s6-notbar .gdr-not-items { display: flex; gap: 1.5em; }
+#s6 .s6-notbar .gdr-not-item h4 { font-size: .7em; font-weight: 700; color: rgba(255,255,255,.9); }
+#s6 .s6-notbar .gdr-not-item p  { font-size: .6em; color: rgba(255,255,255,.6); }
+
+/* ═══════════════════════════════════════════════
+   SLIDE 7 — PROBLEM DARK (3-COL)
+═══════════════════════════════════════════════ */
+#s7 {
+  background: url("Sustainability & PCR Problem copy 3.png") center/cover no-repeat;
+}
+#s7 .s7-frame {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column;
+  padding: 2.5% 5%;
+}
+#s7 .s7-badge {
+  display: flex; align-items: center; justify-content: center; gap: .5em;
+  margin-bottom: .4em;
+}
+#s7 .s7-badge .x-icon {
+  width: 2.2em; height: 2.2em; border-radius: 50%;
+  background: var(--red); color: #fff; font-size: 1em;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 1.3em;
+}
+#s7 h1 { font-size: 2.6em; color: #fff; text-align: center; margin-bottom: .2em; }
+#s7 .s7-sub { font-size: 1.2em; font-weight: 700; color: #fff; text-align: center; margin-bottom: .2em; }
+#s7 .s7-tagline { font-size: .9em; color: rgba(255,255,255,.8); text-align: center; margin-bottom: .8em; }
+#s7 .s7-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5em; flex: 1; }
+.prob-col {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: .6em; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.prob-col .prob-text {
+  padding: .8em 1em .5em; color: #fff;
+}
+.prob-col h3 { font-size: 1.2em; font-weight: 800; margin-bottom: .3em; }
+.prob-col p  { font-size: .78em; color: rgba(255,255,255,.7); line-height: 1.4; }
+.prob-col .prob-img {
+  flex: 1; overflow: hidden; min-height: 0;
+}
+.prob-col .prob-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: brightness(.7) saturate(.8);
+}
+
+/* ═══════════════════════════════════════════════
+   SLIDE 8 — PROBLEM DARK (STACKED)
+═══════════════════════════════════════════════ */
+#s8 {
+  background: url("Sustainability & PCR Problem copy 4.png") center/cover no-repeat;
+}
+#s8 .s8-frame {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column;
+  padding: 2.5% 5%;
+}
+#s8 .s8-header { display: flex; align-items: center; gap: .5em; margin-bottom: .3em; }
+#s8 .s8-header .x-icon {
+  width: 2em; height: 2em; border-radius: 50%;
+  background: var(--red); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 1.2em; flex-shrink: 0;
+}
+#s8 h1 { font-size: 2.4em; color: #fff; }
+#s8 .s8-tagline { font-size: .9em; color: rgba(255,255,255,.8); margin-bottom: .8em; padding-left: 2.5em; }
+#s8 .s8-rows { display: flex; flex-direction: column; gap: .6em; flex: 1; }
+.prob-row {
+  display: grid; grid-template-columns: 1.5fr 1fr;
+  border: 1px solid rgba(255,255,255,.15); border-radius: .5em; overflow: hidden;
+  flex: 1;
+}
+.prob-row .pr-text {
+  padding: .8em 1.2em; display: flex; flex-direction: column; justify-content: center;
+}
+.prob-row h3 { font-size: 1.1em; font-weight: 800; color: #fff; margin-bottom: .3em; }
+.prob-row p  { font-size: .75em; color: rgba(255,255,255,.7); }
+.prob-row .pr-img { overflow: hidden; }
+.prob-row .pr-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: brightness(.65) saturate(.7);
+}
+
+/* ═══════════════════════════════════════════════
+   SLIDE 9 — SOLUTION (3-COL LIGHT)
+═══════════════════════════════════════════════ */
+#s9 { background: #f9f9f9; }
+#s9 .s9-body {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  padding: 2.5% 4%;
+}
+.check-badge {
+  display: flex; align-items: center; justify-content: center; gap: .5em;
+  margin-bottom: .3em;
+}
+.check-icon {
+  width: 2.2em; height: 2.2em; border-radius: 50%;
+  background: var(--green); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1em; font-weight: 900; flex-shrink: 0;
+}
+#s9 h1 { font-size: 2.6em; text-align: center; }
+#s9 .s9-sub  { font-size: 1.2em; font-weight: 700; text-align: center; margin: .2em 0; }
+#s9 .s9-desc { font-size: .9em; color: var(--muted); text-align: center; margin-bottom: .8em; }
+#s9 .s9-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5em; flex: 1; }
+.sol-col {
+  border: 1px solid var(--border); border-radius: .6em; overflow: hidden;
+  display: flex; flex-direction: column; background: #fff;
+}
+.sol-col .sc-text { padding: .8em 1em .5em; }
+.sol-col h3 { font-size: 1.1em; font-weight: 800; margin-bottom: .25em; }
+.sol-col .sc-desc { font-size: .75em; color: var(--muted); line-height: 1.4; }
+.sol-col .sc-img { flex: 1; overflow: hidden; min-height: 0; }
+.sol-col .sc-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ═══════════════════════════════════════════════
+   SLIDE 10 — CONSUMER EXPERIENCE (STACKED)
+═══════════════════════════════════════════════ */
+#s10 { background: #f9f9f9; }
+#s10 .s10-body {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  padding: 2.5% 4%;
+}
+#s10 .s10-header { margin-bottom: .5em; }
+#s10 h1 { font-size: 2.4em; }
+#s10 .s10-desc { font-size: .9em; color: var(--muted); margin-bottom: .6em; }
+#s10 .s10-rows { display: flex; flex-direction: column; gap: .5em; flex: 1; }
+.ce-row {
+  display: grid; grid-template-columns: 1fr 1.5fr;
+  border: 1px solid var(--border); border-radius: .5em; overflow: hidden;
+  flex: 1; background: #fff;
+}
+.ce-row .cr-text {
+  padding: .8em 1.2em; display: flex; flex-direction: column; justify-content: center;
+  border-right: 1px solid var(--border);
+}
+.ce-row h3 { font-size: 1.05em; font-weight: 800; margin-bottom: .2em; }
+.ce-row p  { font-size: .75em; color: var(--muted); line-height: 1.4; }
+.ce-row .cr-img { overflow: hidden; }
+.ce-row .cr-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ═══════════════════════════════════════════════
+   SLIDE 11 — FUTURE PROOF
+═══════════════════════════════════════════════ */
+#s11 { background: #fff; }
+#s11 .s11-body {
+  position: absolute; inset: 0; display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+#s11 .s11-left {
+  padding: 5% 4% 3% 5%;
+  display: flex; flex-direction: column; justify-content: center;
+}
+#s11 .s11-logo { height: 2.8em; margin-bottom: 1.5em; }
+#s11 h1 { font-size: 2.5em; margin-bottom: .4em; line-height: 1.1; }
+#s11 .s11-tagline { font-size: 1em; color: var(--muted); margin-bottom: 1.2em; }
+.feature-block { margin-bottom: .9em; }
+.feature-block h4 {
+  font-size: .88em; font-weight: 800; margin-bottom: .3em;
+  padding-bottom: .25em; border-bottom: 1.5px solid #ddd;
+}
+.feature-block p { font-size: .75em; color: var(--muted); line-height: 1.5; }
+.feature-block ul { list-style: none; padding: 0; }
+.feature-block ul li {
+  font-size: .75em; color: var(--muted); padding: .15em 0 .15em 1em;
+  position: relative; line-height: 1.4;
+}
+.feature-block ul li::before { content: '•'; position: absolute; left: 0; color: var(--green); }
+
+#s11 .s11-right {
+  position: relative; overflow: hidden;
+}
+#s11 .s11-right img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
+/* ═══════════════════════════════════════════════
+   SLIDE 12 — PARTNERSHIPS
+═══════════════════════════════════════════════ */
+#s12 { background: #fff; }
+#s12 .s12-body {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  padding: 2% 4%;
+}
+#s12 .s12-logo { height: 2.5em; margin-bottom: .6em; }
+#s12 h1 { font-size: 2em; text-align: center; margin-bottom: .2em; }
+#s12 .s12-section-title {
+  font-size: .9em; font-weight: 700; text-align: center;
+  color: var(--muted); margin-bottom: .5em;
+}
+#s12 .s12-section-title span { color: var(--text); }
+
+.partner-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: .6em; margin-bottom: .5em;
+}
+.partner-card {
+  border: 1px solid var(--border); border-radius: .5em; padding: .7em .8em;
+}
+.partner-card h4 { font-size: .82em; font-weight: 700; margin-bottom: .3em; line-height: 1.2; }
+.partner-card p  { font-size: .7em; color: var(--muted); line-height: 1.4; }
+
+.s12-divider {
+  border: none; border-top: 1.5px solid var(--border); margin: .4em 0;
+}
+.s12-sub-title {
+  font-size: .9em; font-weight: 700; text-align: center; margin-bottom: .5em;
+}
+
+/* ═══════════════════════════════════════════════
+   SLIDE 13 — CLOSING
+═══════════════════════════════════════════════ */
+#s13 {
+  background: url("assets/Hero Images/hero-bg2.png") center/cover no-repeat;
+}
+#s13::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(0,0,0,.42);
+}
+#s13 .s13-content {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 5%;
+}
+#s13 h1 {
+  font-size: 4.5em; color: #fff; font-weight: 800;
+  line-height: 1.1; margin-bottom: .4em;
+}
+#s13 .s13-url { font-size: 1.1em; color: rgba(255,255,255,.85); margin-bottom: 3em; }
+#s13 .s13-logos {
+  position: absolute; bottom: 5%; left: 0; right: 0;
+  display: flex; justify-content: center; align-items: center; gap: 3em;
+}
+.s13-badge {
+  background: rgba(255,255,255,.15); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: .5em; padding: .4em .9em;
+  color: #fff; font-size: .8em; font-weight: 700; letter-spacing: .04em;
+}
+.s13-badge.logo-badge {
+  display: flex; align-items: center; gap: .4em;
+}
+.infinity-logo-text {
+  font-size: 1em; font-weight: 900; letter-spacing: .08em;
+}
+
+</style>
+</head>
+<body>
+
+<div id="stage">
+ <div id="viewport">
+
+  <!-- ═══ SLIDE 1 — TITLE ═══ -->
+  <section class="slide active" id="s1">
+    <div class="s1-content">
+      <img class="s1-logo"
+           src="assets/logo.svg"
+           alt="Lucid Corp">
+      <h1>Sustainable Plastic:</h1>
+      <p class="s1-sub">The Future of Packaging</p>
+      <p class="s1-quote">Every choice for the planet is a<br>promise to the next generation.</p>
+    </div>
+    <div class="s1-partner">
+      <span class="sobeys-badge">Sobeys</span>
+      <span class="sobeys-leaf"></span>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 2 — FOUNDED ═══ -->
+  <section class="slide" id="s2">
+    <div class="slide-logo">
+      <img src="assets/logo.svg" alt="Lucid Corp">
+    </div>
+    <div class="s2-body">
+      <div class="s2-top">
+        <h1>Founded in 2020</h1>
+        <p>Toronto, Ontario</p>
+      </div>
+      <div class="s2-founders">
+        <div class="founder">
+          <div class="founder-avatar">SE</div>
+          <div class="founder-info">
+            <h4>Salman Ebrahim</h4>
+            <p>President</p>
+          </div>
+        </div>
+        <div class="founder">
+          <div class="founder-avatar">EC</div>
+          <div class="founder-info">
+            <h4>Edmund Chin</h4>
+            <p>Managing Director</p>
+          </div>
+        </div>
+      </div>
+      <p class="s2-tagline">State of the art production facilities and warehouse space totaling 375,000 sq ft, supporting 1.5 Billion Infinity trays of Upcoming Capacity</p>
+      <div class="s2-facilities">
+        <div class="facility-card">
+          <img src="assets/orenda-3d.png" alt="Orenda Facility">
+          <div>
+            <div class="fc-title">Orenda</div>
+            <ul>
+              <li>Oct 22 – 180,000 sq ft expansion</li>
+              <li>Support bakery, produce and protein partners</li>
+              <li>In-house design and prototyping teams</li>
+              <li>In-house automation systems accelerate smart design and flawless execution</li>
+            </ul>
+          </div>
+        </div>
+        <div class="facility-card">
+          <img src="assets/spinnaker-3d.png" alt="Spinnaker Facility">
+          <div>
+            <div class="fc-title">Spinnaker</div>
+            <ul>
+              <li>Dec 24 – 215,000 sq ft expansion</li>
+              <li>Support protein segment globally</li>
+              <li>250 million protein trays per quarter</li>
+              <li>Nine CNCs, automation, thermoforming accuracy, and product integrity</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="s2-timeline">
+        <div class="timeline-banner">Our Journey</div>
+        <div class="timeline-track">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-label">Lucid X – Oct 2021</div>
+            <div class="tl-desc">Roll sheet manufacturer</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-label">Lucid Corp – Feb 2022</div>
+            <div class="tl-desc">Thermoforming 45,000 sq ft</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-label">Lucid Corp – Oct 2022</div>
+            <div class="tl-desc">160,000 sq ft Expansion to support $100 million growth</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-label">Lucid Corp – 2024</div>
+            <div class="tl-desc">215,000 sq ft expansion to support north of $250 million capacity for 2025</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-label">Lucid Corp – 2025</div>
+            <div class="tl-desc">1.5 Billion Infinity trays ready to market</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 3 — MARKET ═══ -->
+  <section class="slide" id="s3">
+    <div class="slide-logo">
+      <img src="assets/logo.svg" alt="Lucid Corp">
+    </div>
+    <div class="s3-body">
+      <h1>Lucid Infinity Protein &amp; Seafood in the market</h1>
+      <div class="s3-grid">
+        <div class="big">
+          <img src="assets/market1.jpg" alt="Protein in market">
+        </div>
+        <div>
+          <img src="assets/market2.jpg" alt="Seafood at retail">
+        </div>
+        <div>
+          <img src="assets/market3.jpg" alt="Seafood at retail">
+        </div>
+      </div>
+      <div class="s3-retailers">
+        <p>We are Present in Every Major Retailer Across North America</p>
+        <div class="retailer-logos">
+          <span class="retailer-badge rb-walmart">Walmart</span>
+          <span class="retailer-badge rb-loblaws">Loblaws</span>
+          <span class="retailer-badge rb-sobeys">Sobeys</span>
+          <span class="retailer-badge rb-costco">Costco</span>
+          <span class="retailer-badge rb-metro">metro</span>
+          <span class="retailer-badge rb-aldi">ALDI</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 4 — SEGMENTS ═══ -->
+  <section class="slide" id="s4">
+    <div class="slide-logo">
+      <img src="assets/logo.svg" alt="Lucid Corp">
+    </div>
+    <div class="s4-body">
+      <h1>Segments we offer</h1>
+
+      <!-- Protein -->
+      <div class="seg-row">
+        <div class="seg-label">Protein</div>
+        <div class="seg-items">
+          <div class="seg-item wide">
+            <img src="assets/tray2.png" alt="Beef">
+          </div>
+          <div class="seg-item wide">
+            <img src="assets/tray1.png" alt="Chicken Breasts">
+          </div>
+          <div class="seg-item wide">
+            <img src="assets/tray7.png" alt="Shrimp">
+          </div>
+          <div class="seg-item wide">
+            <img src="assets/Hero Images/tray6.png" alt="Salmon">
+          </div>
+        </div>
+      </div>
+
+      <!-- Produce -->
+      <div class="seg-row">
+        <div class="seg-label">Produce</div>
+        <div class="seg-items">
+          <div class="seg-item">
+            <img src="assets/lettuce.png" alt="Lettuce">
+          </div>
+          <div class="seg-item">
+            <img src="assets/Hero Images/tray11.png" alt="Blackberries">
+          </div>
+          <div class="seg-item">
+            <img src="assets/tray7.png" alt="Strawberries">
+          </div>
+          <div class="seg-item">
+            <img src="assets/tray6.png" alt="Pineapple">
+          </div>
+          <div class="seg-item">
+            <img src="assets/tray5.png" alt="Tomatoes">
+          </div>
+          <div class="seg-item">
+            <img src="assets/Hero Images/tray12.png" alt="Raspberries">
+          </div>
+        </div>
+      </div>
+
+      <!-- Bakery -->
+      <div class="seg-row">
+        <div class="seg-label">Bakery</div>
+        <div class="seg-items">
+          <div class="seg-item wide">
+            <img src="assets/tray8.png" alt="Croissants">
+          </div>
+          <div class="seg-item wide">
+            <img src="assets/card3.png" alt="Pastry">
+          </div>
+          <div class="seg-item wide">
+            <img src="assets/Hero Images/tray10.png" alt="Watermelon">
+          </div>
+          <div class="seg-item wide">
+            <img src="assets/Hero Images/tray8.png" alt="Seafood">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 5 — GDR WITH PRODUCTS ═══ -->
+  <section class="slide" id="s5">
+    <div class="slide-logo">
+      <img src="assets/logo.svg" alt="Lucid Corp">
+    </div>
+    <div class="s5-body">
+      <div class="s5-header">
+        <h1>Lucid Infinity aligns with Golden Design Rules</h1>
+        <p>A sustainable packaging innovation with superior recyclability, clarity, and durability.</p>
+      </div>
+      <div class="s5-main">
+        <!-- GDR cards -->
+        <div>
+          <div class="gdr-grid">
+            <div class="gdr-card active-gdr">
+              <h4>GDR 1</h4>
+              <p>Increase Value in PET Recycling</p>
+            </div>
+            <div class="gdr-card active-gdr">
+              <h4>GDR 2</h4>
+              <p>Remove Problematic Elements from Packaging</p>
+            </div>
+            <div class="gdr-photo">
+              <img src="assets/tray1.png" alt="Chicken">
+            </div>
+            <div class="gdr-card active-gdr">
+              <h4>GDR 3</h4>
+              <p>Eliminate Excess Headspace</p>
+            </div>
+            <div class="gdr-card active-gdr">
+              <h4>GDR 5</h4>
+              <p>Increase Recycling Value for PET Thermoformed Trays and Other PET Thermoformed Packaging</p>
+            </div>
+            <div class="gdr-photo">
+              <img src="assets/Hero Images/tray11.png" alt="Berries">
+            </div>
+            <div class="gdr-card active-gdr">
+              <h4>GDR 8</h4>
+              <p>Reduce Virgin Plastic Use in Business-to-Business Plastic Packaging</p>
+            </div>
+            <div class="gdr-card active-gdr">
+              <h4>GDR 9</h4>
+              <p>Use On-Pack Recycling Instructions</p>
+            </div>
+            <div class="gdr-photo">
+              <img src="assets/tray8.png" alt="Bakery">
+            </div>
+          </div>
+          <div class="gdr-not-bar">
+            <span class="label">Not Applicable GDR Below</span>
+            <div class="gdr-not-items">
+              <div class="gdr-not-item">
+                <h4>GDR 4</h4>
+                <p>Reduce Plastic Overweight</p>
+              </div>
+              <div class="gdr-not-item">
+                <h4>GDR 6</h4>
+                <p>Increase Recycling Value in Flexible Consumer Packaging</p>
+              </div>
+              <div class="gdr-not-item">
+                <h4>GDR 7</h4>
+                <p>Increase Recycling Value in Rigid HDPE and PP</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Product photos -->
+        <div class="photo-grid">
+          <img class="p-wide" src="assets/tray2.png" alt="Beef">
+          <img src="assets/tray6.png" alt="Pineapple">
+          <img src="assets/Hero Images/tray11.png" alt="Blackberries">
+          <img src="assets/tray8.png" alt="Croissants">
+          <img src="assets/tray7.png" alt="Shrimp">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 6 — GDR WITH TRAY ═══ -->
+  <section class="slide" id="s6">
+    <div class="slide-logo">
+      <img src="assets/logo.svg" alt="Lucid Corp">
+    </div>
+    <div class="s6-body">
+      <div class="s6-header">
+        <h1>Lucid Infinity aligns with Golden Design Rules</h1>
+        <p>A sustainable packaging innovation with superior recyclability, clarity, and durability.</p>
+      </div>
+      <div class="s6-main">
+        <!-- Left GDR labels -->
+        <div class="gdr-side">
+          <div class="gdr-side-card">
+            <h4>GDR 1</h4>
+            <p>Increase Value in PET Recycling</p>
+          </div>
+          <div class="gdr-side-card">
+            <h4>GDR 2</h4>
+            <p>Remove Problematic Elements from Packaging</p>
+          </div>
+          <div class="gdr-side-card">
+            <h4>GDR 3</h4>
+            <p>Eliminate Excess Headspace</p>
+          </div>
+        </div>
+        <!-- Center tray -->
+        <div class="tray-center">
+          <img src="assets/Transparent Tray Horizontal.png"
+               alt="Lucid Infinity Tray">
+        </div>
+        <!-- Right GDR labels -->
+        <div class="gdr-side">
+          <div class="gdr-side-card">
+            <h4>GDR 5</h4>
+            <p>Increase Recycling Value for PET Thermoformed Trays and Other PET Thermoformed Packaging</p>
+          </div>
+          <div class="gdr-side-card">
+            <h4>GDR 8</h4>
+            <p>Reduce Virgin Plastic Use in Business-to-Business Plastic Packaging</p>
+          </div>
+          <div class="gdr-side-card">
+            <h4>GDR 9</h4>
+            <p>Use On-Pack Recycling Instructions</p>
+          </div>
+        </div>
+      </div>
+      <div class="s6-notbar">
+        <span class="label">Not Applicable GDR Below</span>
+        <div class="gdr-not-items">
+          <div class="gdr-not-item"><h4>GDR 4</h4><p>Reduce Plastic Overweight</p></div>
+          <div class="gdr-not-item"><h4>GDR 6</h4><p>Increase Recycling Value in Flexible Consumer Packaging</p></div>
+          <div class="gdr-not-item"><h4>GDR 7</h4><p>Increase Recycling Value in Rigid HDPE and PP</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 7 — PROBLEM DARK 3-COL ═══ -->
+  <section class="slide" id="s7">
+    <div class="s7-frame">
+      <div class="s7-badge">
+        <div class="x-icon">✕</div>
+      </div>
+      <h1>The Retailer's Problems</h1>
+      <p class="s7-sub">Sustainability &amp; PCR</p>
+      <p class="s7-tagline">50+ Billion Trays with soaker pads dumped into landfills each year</p>
+      <div class="s7-cols">
+        <div class="prob-col">
+          <div class="prob-text">
+            <h3>Soaker pads<br>block trays</h3>
+            <p>From the recycling stream leading to the generation of endless single-use plastics</p>
+          </div>
+          <div class="prob-img">
+            <img src="assets/tray2.png" alt="Beef tray">
+          </div>
+        </div>
+        <div class="prob-col">
+          <div class="prob-text">
+            <h3>3000+ trays with<br>soaker pads</h3>
+            <p>Will be dumped into landfills by the time you finish this sentence</p>
+          </div>
+          <div class="prob-img">
+            <img src="assets/tray1.png" alt="Chicken tray">
+          </div>
+        </div>
+        <div class="prob-col">
+          <div class="prob-text">
+            <h3>Mixed materials<br>+ mixed messages</h3>
+            <p>Limited consumer adoption for recycling, devaluing the recycling stream</p>
+          </div>
+          <div class="prob-img">
+            <img src="assets/Transparent Tray Horizontal.png" alt="Tray">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 8 — PROBLEM DARK STACKED ═══ -->
+  <section class="slide" id="s8">
+    <div class="s8-frame">
+      <div class="s8-header">
+        <div class="x-icon">✕</div>
+        <h1>Sustainability &amp; PCR Problem</h1>
+      </div>
+      <p class="s8-tagline">50+ Billion Trays with soaker pads dumped into landfills each year</p>
+      <div class="s8-rows">
+        <div class="prob-row">
+          <div class="pr-text">
+            <h3>Soaker pads block trays</h3>
+            <p>From the recycling stream leading to the generation of endless single-use plastics</p>
+          </div>
+          <div class="pr-img">
+            <img src="assets/tray2.png" alt="Beef">
+          </div>
+        </div>
+        <div class="prob-row">
+          <div class="pr-text">
+            <h3>3000+ trays with soaker pads</h3>
+            <p>Will be dumped into landfills by the time you finish this sentence</p>
+          </div>
+          <div class="pr-img">
+            <img src="assets/tray3.png" alt="Chicken thighs">
+          </div>
+        </div>
+        <div class="prob-row">
+          <div class="pr-text">
+            <h3>Mixed materials + mixed messages</h3>
+            <p>Limited consumer adoption for recycling, devaluing the recycling stream</p>
+          </div>
+          <div class="pr-img">
+            <img src="assets/Transparent Tray Horizontal.png" alt="Tray">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 9 — SOLUTION 3-COL LIGHT ═══ -->
+  <section class="slide" id="s9">
+    <div class="slide-logo">
+      <img src="assets/logo.svg" alt="Lucid Corp">
+    </div>
+    <div class="s9-body">
+      <div class="check-badge">
+        <div class="check-icon">✓</div>
+        <h1>The Retailer's Solution</h1>
+      </div>
+      <p class="s9-sub">Consumer Experience</p>
+      <p class="s9-desc">Fresher food, cleaner hands, zero guilt.</p>
+      <div class="s9-cols">
+        <div class="sol-col">
+          <div class="sc-text">
+            <h3>Pad-less Solution</h3>
+            <p class="sc-desc">No more touching drenched soaker pads, just cleaner, effortless handling.</p>
+          </div>
+          <div class="sc-img">
+            <img src="assets/tray1.png" alt="Chicken breasts">
+          </div>
+        </div>
+        <div class="sol-col">
+          <div class="sc-text">
+            <h3>Our Patented Technology</h3>
+            <p class="sc-desc">Ensures durable, leak-resistant trays, eliminates dealing with disgusting "Diaper" leaks.</p>
+          </div>
+          <div class="sc-img">
+            <img src="assets/tray4.png" alt="Pork chops">
+          </div>
+        </div>
+        <div class="sol-col">
+          <div class="sc-text">
+            <h3>Simply Rinse &amp; Recycle</h3>
+            <p class="sc-desc">Consumers make a positive impact, contribute to solving the biggest food packaging problem.</p>
+          </div>
+          <div class="sc-img">
+            <img src="assets/tray7.png" alt="Shrimp">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 10 — CONSUMER EXP STACKED ═══ -->
+  <section class="slide" id="s10">
+    <div class="slide-logo">
+      <img src="assets/logo.svg" alt="Lucid Corp">
+    </div>
+    <div class="s10-body">
+      <div class="s10-header">
+        <div class="check-badge" style="justify-content:flex-start;margin-bottom:.2em;">
+          <div class="check-icon">✓</div>
+          <h1>Consumer Experience</h1>
+        </div>
+        <p class="s10-desc">Fresher food, cleaner hands, zero guilt.</p>
+      </div>
+      <div class="s10-rows">
+        <div class="ce-row">
+          <div class="cr-text">
+            <h3>Pad-less Solution</h3>
+            <p>No more touching drenched soaker pads, just cleaner, effortless handling.</p>
+          </div>
+          <div class="cr-img">
+            <img src="assets/tray1.png" alt="Chicken breasts">
+          </div>
+        </div>
+        <div class="ce-row">
+          <div class="cr-text">
+            <h3>Our Patented Technology</h3>
+            <p>Ensures durable, leak-resistant trays, eliminates dealing with disgusting "Diaper" leaks.</p>
+          </div>
+          <div class="cr-img">
+            <img src="assets/tray4.png" alt="Pork chops">
+          </div>
+        </div>
+        <div class="ce-row">
+          <div class="cr-text">
+            <h3>Simply Rinse &amp; Recycle</h3>
+            <p>Consumers make a positive impact, contribute to solving the biggest food packaging problem.</p>
+          </div>
+          <div class="cr-img">
+            <img src="assets/tray7.png" alt="Shrimp">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 11 — FUTURE PROOF ═══ -->
+  <section class="slide" id="s11">
+    <div class="s11-body">
+      <div class="s11-left">
+        <img class="s11-logo"
+             src="assets/logo.svg"
+             alt="Lucid Corp">
+        <h1>Future-Proof Pad-Less Packaging Solution</h1>
+        <p class="s11-tagline">A clear step toward a true circular design</p>
+
+        <div class="feature-block">
+          <h4>Key Features</h4>
+          <ul>
+            <li>100% Recyclable, Patented Pad-less Design</li>
+            <li>Innovative 2-piece design eliminates the need for absorbent pads, reducing contamination, cost and landfill waste</li>
+          </ul>
+        </div>
+        <div class="feature-block">
+          <h4>Sustainability Benefits</h4>
+          <ul>
+            <li>Full design for recycling (DFR) compliance</li>
+            <li>Meets 6 of the 9 CEFLEX Golden design rules</li>
+            <li>Closed-loop ready: Easy to Recycle</li>
+          </ul>
+        </div>
+        <div class="feature-block">
+          <h4>Regulatory Readiness</h4>
+          <ul>
+            <li>Fully aligned with the EU packaging &amp; packaging waste regulation (PPWR) Future-proof format</li>
+            <li>Mono-material Recycled PET meets food-contact safety standards</li>
+          </ul>
+        </div>
+      </div>
+      <div class="s11-right">
+        <img src="assets/infinity-tray.jpg"
+             alt="Hand peeling Lucid Infinity tray">
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 12 — PARTNERSHIPS ═══ -->
+  <section class="slide" id="s12">
+    <div class="slide-logo">
+      <img src="assets/logo.svg" alt="Lucid Corp">
+    </div>
+    <div class="s12-body">
+      <h1>Built for Partnerships. Structured for Growth.</h1>
+
+      <p class="s12-section-title"><span>Built-in Value:</span> The Lucid Advantage</p>
+      <div class="partner-grid">
+        <div class="partner-card">
+          <h4>Inventory Performance</h4>
+          <p>100% fill rate since inception.</p>
+        </div>
+        <div class="partner-card">
+          <h4>Production Capacity</h4>
+          <p>375,000 sq ft across 2 facilities, supporting 1.5 billion sets of trays annually.</p>
+        </div>
+        <div class="partner-card">
+          <h4>Certified Excellence</h4>
+          <p>Lucid Corp's FSSC 22000 compliant facilities with full traceability; every production run passes our partners validation standards.</p>
+        </div>
+        <div class="partner-card">
+          <h4>Environmental / PCR</h4>
+          <p>Actively scaling Post-Consumer Recycled PET — secure supply ready to meet growing demand.</p>
+        </div>
+      </div>
+
+      <hr class="s12-divider">
+
+      <p class="s12-sub-title">Delivering End-to-End, Circular Design-to-Tooling Solutions</p>
+      <div class="partner-grid">
+        <div class="partner-card">
+          <h4>Strategic Partnerships, Engineered for Scale</h4>
+          <p>Lucid trays are custom-engineered for high-speed processors and seamless machine uptime. In-house design and prototype samples are provided to our partners.<br><br>Our team provides ongoing support to ensure optimal performance on your lines.</p>
+        </div>
+        <div class="partner-card">
+          <h4>Total System Integration – From Tray to Line</h4>
+          <p>Lucid trays are custom-engineered for high-speed processors and seamless machine uptime. In-house design and prototype samples are provided to our partners.<br><br>Our team provides ongoing support to ensure optimal performance on your lines.</p>
+        </div>
+        <div class="partner-card">
+          <h4>Proven Delivery &amp; Supply Continuity</h4>
+          <p>100% fill rate on every order to date. We maintain 8–12 weeks of raw materials and finished goods to protect your production schedules.</p>
+        </div>
+        <div class="partner-card">
+          <h4>Precision Thermoforming &amp; Market-Ready Design</h4>
+          <p>Clear PET trays, custom-designed for retailers and engineered for speed and shelf appeal. Nine CNCs, strong focus on automation, thermoforming accuracy, and product integrity. Customizable to work effortlessly on your existing lines.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SLIDE 13 — CLOSING ═══ -->
+  <section class="slide" id="s13">
+    <div class="s13-content">
+      <h1>One Tray.<br>Infinite Possibilities.</h1>
+      <p class="s13-url">www.lucidcorp.com</p>
+    </div>
+    <div class="s13-logos">
+      <div class="s13-badge logo-badge">
+        <span class="infinity-logo-text">LUCID INFINITY</span>
+      </div>
+      <div class="s13-badge">
+        ♻ Recyclable</div>
+      <div class="s13-badge">FSSC 22000</div>
+      <div class="s13-badge">Sustainable Packaging Coalition</div>
+    </div>
+  </section>
+
+  <!-- ── NAV ARROWS ── -->
+  <button class="nav-btn" id="btn-prev" aria-label="Previous">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+  </button>
+  <button class="nav-btn" id="btn-next" aria-label="Next">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
+  </button>
+
+  <!-- ── TOP BAR ── -->
+  <div id="topbar">
+    <button class="icon-btn" id="btn-auto" title="Autoplay">
+      <svg id="ico-play"  viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="ico-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none">
+        <rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>
+      </svg>
+    </button>
+    <button class="icon-btn" id="btn-fs" title="Fullscreen (F)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ── BOTTOM BAR ── -->
+  <div id="bar">
+    <div id="dots"></div>
+    <span id="counter"></span>
+  </div>
+
+  <!-- ── PROGRESS ── -->
+  <div id="progress"></div>
+
+  <!-- ── HINT ── -->
+  <div id="hint">← → SPACE · click to navigate · F = fullscreen</div>
+
+ </div><!-- /viewport -->
+</div><!-- /stage -->
+
+<script>
+const SLIDES = document.querySelectorAll('.slide');
+const N = SLIDES.length;
+const AUTOPLAY_MS = 7000;
+
+let cur = 0, prev = -1, busy = false, playing = false, timer = null;
+
+// dots
+const dotsEl = document.getElementById('dots');
+const dotEls = Array.from({length: N}, (_, i) => {
+  const b = document.createElement('button');
+  b.className = 'dot' + (i === 0 ? ' active' : '');
+  b.setAttribute('aria-label', `Slide ${i+1}`);
+  b.addEventListener('click', () => go(i));
+  dotsEl.appendChild(b);
+  return b;
+});
+
+function ui() {
+  document.getElementById('counter').textContent = `${cur+1} / ${N}`;
+  document.getElementById('progress').style.width = `${(cur+1)/N*100}%`;
+  document.getElementById('btn-prev').disabled = cur === 0;
+  document.getElementById('btn-next').disabled = cur === N - 1;
+  dotEls.forEach((d,i) => d.classList.toggle('active', i === cur));
+}
+
+function go(idx, dir = 'next') {
+  if (idx === cur || busy) return;
+  busy = true;
+  const exitCls = dir === 'next' ? 'exit-l' : 'exit-r';
+  SLIDES[cur].classList.remove('active');
+  SLIDES[cur].classList.add(exitCls);
+  const old = cur;
+  cur = idx;
+  SLIDES[cur].classList.add('active');
+  ui();
+  if (playing) arm();
+  const el = SLIDES[old];
+  el.addEventListener('transitionend', function h() {
+    el.classList.remove(exitCls);
+    el.removeEventListener('transitionend', h);
+    busy = false;
+  });
+}
+
+function next() { if (cur < N-1) go(cur+1,'next'); else if (playing) go(0,'next'); }
+function back() { if (cur > 0)   go(cur-1,'prev'); }
+
+function arm() { clearTimeout(timer); timer = setTimeout(next, AUTOPLAY_MS); }
+
+function toggleAuto() {
+  playing = !playing;
+  document.getElementById('ico-play').style.display  = playing ? 'none' : '';
+  document.getElementById('ico-pause').style.display = playing ? '' : 'none';
+  if (playing) arm(); else clearTimeout(timer);
+}
+
+function toggleFs() {
+  if (!document.fullscreenElement)
+    (document.documentElement.requestFullscreen ||
+     document.documentElement.webkitRequestFullscreen).call(document.documentElement);
+  else
+    (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+}
+
+document.getElementById('btn-prev').addEventListener('click', back);
+document.getElementById('btn-next').addEventListener('click', next);
+document.getElementById('btn-auto').addEventListener('click', toggleAuto);
+document.getElementById('btn-fs').addEventListener('click', toggleFs);
+
+// click zones on slides
+SLIDES.forEach(s => {
+  s.addEventListener('click', e => {
+    const mid = s.getBoundingClientRect().left + s.getBoundingClientRect().width / 2;
+    e.clientX < mid ? back() : next();
+  });
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+  if (e.key === 'ArrowLeft')                   { e.preventDefault(); back(); }
+  if (e.key === 'f' || e.key === 'F')           toggleFs();
+  if (e.key === 'p' || e.key === 'P')           toggleAuto();
+  if (e.key === 'Home')                         go(0);
+  if (e.key === 'End')                          go(N-1);
+});
+
+let tx = 0;
+document.getElementById('viewport').addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; }, {passive:true});
+document.getElementById('viewport').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 40) dx < 0 ? next() : back();
+}, {passive:true});
+
+ui();
+</script>
+</body>
+</html>

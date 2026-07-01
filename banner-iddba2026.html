@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IDDBA 2026 — Lucid Corp Banner</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 40px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .label {
+    color: rgba(255,255,255,0.3);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* ── LEADERBOARD 728×90 ── */
+  .banner-728 {
+    width: 728px;
+    height: 90px;
+    background: #000;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* ── WIDE / HERO 1200×300 ── */
+  .banner-hero {
+    width: min(1200px, calc(100vw - 80px));
+    height: 300px;
+    background: #000;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* ── MEDIUM RECT 300×250 ── */
+  .banner-300 {
+    width: 300px;
+    height: 250px;
+    background: #000;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ─── SHARED INTERNALS ─────────────────────── */
+  .b-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  /* Leaderboard internals */
+  .banner-728 .b-glow-1 {
+    width: 300px; height: 200px;
+    background: radial-gradient(ellipse, rgba(59,142,255,0.35) 0%, transparent 70%);
+    top: -80px; left: -40px;
+  }
+  .banner-728 .b-glow-2 {
+    width: 200px; height: 200px;
+    background: radial-gradient(ellipse, rgba(0,87,255,0.2) 0%, transparent 70%);
+    top: -60px; right: 160px;
+  }
+  .banner-728 .tray-img {
+    position: absolute;
+    right: -20px;
+    bottom: -30px;
+    height: 180px;
+    opacity: 0.92;
+    transform: rotate(-8deg);
+    pointer-events: none;
+  }
+  .banner-728 .content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 28px;
+  }
+  .banner-728 .logo-wrap {
+    display: flex;
+    align-items: center;
+    padding-right: 28px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .banner-728 .logo-wrap img { height: 30px; filter: brightness(0) invert(1); }
+  .banner-728 .divider-vert {
+    width: 1px; background: rgba(255,255,255,0.1);
+    height: 50px; flex-shrink: 0;
+  }
+  .banner-728 .tagline {
+    padding: 0 28px;
+    flex: 1;
+  }
+  .banner-728 .tagline .visit {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #3b8eff;
+    margin-bottom: 2px;
+  }
+  .banner-728 .tagline .event {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .banner-728 .tagline .event span { color: #3b8eff; }
+  .banner-728 .info {
+    padding: 0 0 0 28px;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .banner-728 .info .date {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.4;
+  }
+  .banner-728 .info .location {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.4;
+  }
+  .banner-728 .booth-pill {
+    margin-left: 24px;
+    background: linear-gradient(135deg, #3b8eff, #0057ff);
+    border-radius: 980px;
+    padding: 10px 20px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  .banner-728 .booth-pill .blabel {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    display: block;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .banner-728 .booth-pill .bnum {
+    font-size: 20px;
+    font-weight: 800;
+    color: #fff;
+    display: block;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  /* Hero banner internals */
+  .banner-hero .b-glow-1 {
+    width: 600px; height: 500px;
+    background: radial-gradient(ellipse, rgba(59,142,255,0.3) 0%, transparent 65%);
+    top: -200px; left: -100px;
+  }
+  .banner-hero .b-glow-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(ellipse, rgba(0,87,255,0.2) 0%, transparent 65%);
+    bottom: -200px; left: 400px;
+  }
+  .banner-hero .tray-img {
+    position: absolute;
+    right: -40px;
+    bottom: -60px;
+    height: 420px;
+    opacity: 0.95;
+    transform: rotate(-6deg);
+    pointer-events: none;
+    filter: drop-shadow(0 20px 60px rgba(0,87,255,0.25));
+  }
+  .banner-hero .content {
+    position: relative;
+    z-index: 2;
+    padding: 0 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 640px;
+  }
+  .banner-hero .logo-wrap img {
+    height: 42px;
+    filter: brightness(0) invert(1);
+  }
+  .banner-hero .visit-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #3b8eff;
+  }
+  .banner-hero .headline {
+    font-size: 48px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .banner-hero .headline span { color: #3b8eff; }
+  .banner-hero .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .banner-hero .meta-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .banner-hero .meta-item .mlabel {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 2px;
+  }
+  .banner-hero .meta-item .mval {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+  .banner-hero .meta-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(255,255,255,0.1);
+  }
+  .banner-hero .booth-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, rgba(59,142,255,0.15), rgba(0,87,255,0.15));
+    border: 1px solid rgba(59,142,255,0.3);
+    border-radius: 14px;
+    padding: 12px 24px;
+    width: fit-content;
+  }
+  .banner-hero .booth-badge .blabel {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+  .banner-hero .booth-badge .bnum {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .banner-hero .booth-badge .dot {
+    width: 6px; height: 6px;
+    background: #3b8eff;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Medium rectangle internals */
+  .banner-300 .b-glow-1 {
+    width: 300px; height: 300px;
+    background: radial-gradient(ellipse, rgba(59,142,255,0.3) 0%, transparent 65%);
+    top: -120px; left: -60px;
+  }
+  .banner-300 .tray-img {
+    position: absolute;
+    bottom: -30px;
+    right: -30px;
+    height: 200px;
+    opacity: 0.85;
+    transform: rotate(-10deg);
+    pointer-events: none;
+    filter: drop-shadow(0 10px 30px rgba(0,87,255,0.3));
+  }
+  .banner-300 .content {
+    position: relative;
+    z-index: 2;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+  }
+  .banner-300 .logo-wrap img {
+    height: 26px;
+    filter: brightness(0) invert(1);
+  }
+  .banner-300 .mid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .banner-300 .visit-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #3b8eff;
+  }
+  .banner-300 .headline {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  .banner-300 .headline span { color: #3b8eff; }
+  .banner-300 .bottom-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .banner-300 .date-loc {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .banner-300 .date-loc .date {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+  }
+  .banner-300 .date-loc .loc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+  .banner-300 .booth-pill {
+    background: linear-gradient(135deg, #3b8eff, #0057ff);
+    border-radius: 10px;
+    padding: 8px 14px;
+    text-align: center;
+  }
+  .banner-300 .booth-pill .blabel {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.65);
+    display: block;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .banner-300 .booth-pill .bnum {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    display: block;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  .b-noise {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 200px;
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── GRID LINES ── */
+  .b-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .banner-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── SIDE BY SIDE for small banners ── */
+  .row-pair {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ── HERO BANNER 1200×300 ── -->
+  <div class="banner-section">
+    <div class="label">Web Banner — 1200 × 300</div>
+    <div class="banner-hero">
+      <div class="b-glow b-glow-1"></div>
+      <div class="b-glow b-glow-2"></div>
+      <div class="b-grid"></div>
+      <div class="b-noise"></div>
+      <div class="content">
+        <div class="logo-wrap">
+          <img src="assets/logo.svg" alt="Lucid Corp">
+        </div>
+        <div class="visit-label">Visit us at</div>
+        <div class="headline">IDDBA <span>2026</span></div>
+        <div class="meta-row">
+          <div class="meta-item">
+            <span class="mlabel">Dates</span>
+            <span class="mval">June 7 – 9, 2026</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">
+            <span class="mlabel">Location</span>
+            <span class="mval">Orlando, Florida</span>
+          </div>
+        </div>
+        <div class="booth-badge">
+          <div class="dot"></div>
+          <span class="blabel">Find us at Booth</span>
+          <span class="bnum">#5061</span>
+        </div>
+      </div>
+      <img class="tray-img" src="assets/Dramatic Tray.png" alt="">
+    </div>
+  </div>
+
+  <!-- ── LEADERBOARD 728×90 ── -->
+  <div class="banner-section">
+    <div class="label">Leaderboard — 728 × 90</div>
+    <div class="banner-728">
+      <div class="b-glow b-glow-1"></div>
+      <div class="b-glow b-glow-2"></div>
+      <div class="b-grid"></div>
+      <div class="b-noise"></div>
+      <img class="tray-img" src="assets/Dramatic Tray.png" alt="">
+      <div class="content">
+        <div class="logo-wrap">
+          <img src="assets/logo.svg" alt="Lucid Corp">
+        </div>
+        <div class="tagline" style="padding-left: 28px;">
+          <div class="visit">Visit us at</div>
+          <div class="event">IDDBA <span>2026</span></div>
+        </div>
+        <div class="info">
+          <div class="date">June 7 – 9, 2026</div>
+          <div class="location">Orlando, Florida</div>
+        </div>
+        <div class="booth-pill">
+          <span class="blabel">Booth</span>
+          <span class="bnum">#5061</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MEDIUM RECTANGLE 300×250 ── -->
+  <div class="banner-section">
+    <div class="label">Medium Rectangle — 300 × 250</div>
+    <div class="banner-300">
+      <div class="b-glow b-glow-1"></div>
+      <div class="b-grid"></div>
+      <div class="b-noise"></div>
+      <img class="tray-img" src="assets/Dramatic Tray.png" alt="">
+      <div class="content">
+        <div class="logo-wrap">
+          <img src="assets/logo.svg" alt="Lucid Corp">
+        </div>
+        <div class="mid">
+          <div class="visit-label">Visit us at</div>
+          <div class="headline">IDDBA <span>2026</span></div>
+        </div>
+        <div class="bottom-row">
+          <div class="date-loc">
+            <span class="date">June 7 – 9, 2026</span>
+            <span class="loc">Orlando, Florida</span>
+          </div>
+          <div class="booth-pill">
+            <span class="blabel">Booth</span>
+            <span class="bnum">#5061</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucid Corp — Lucid Infinity™</title>
+<style>
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #0a0a0a;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+/* ── VARS ── */
+:root {
+  --nav-h: 56px;
+  --dark: #0a0a0a;
+  --darker: #050505;
+  --card-bg: #1a1a1a;
+  --card-bg-hover: #232323;
+  --pill-bg: rgba(255,255,255,0.06);
+  --pill-active: rgba(255,255,255,0.14);
+  --line: rgba(255,255,255,0.08);
+  --line-strong: rgba(255,255,255,0.18);
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.62);
+  --muted-low: rgba(255,255,255,0.4);
+  --max: 1500px;
+  --pad: clamp(20px, 4vw, 56px);
+}
+
+/* ── NAVIGATION ── */
+#nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  height: var(--nav-h);
+  background: var(--dark);
+  display: flex; align-items: center;
+}
+.nav-inner {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex; align-items: center;
+  gap: 40px;
+}
+.nav-logo {
+  display: flex; align-items: center;
+  flex-shrink: 0;
+}
+.nav-logo img {
+  height: 32px;
+  width: auto;
+  filter: brightness(0) invert(1);
+}
+.nav-links {
+  display: flex; align-items: center;
+  gap: 32px;
+  margin-left: 24px;
+}
+.nav-links a {
+  font-size: 14px; font-weight: 400;
+  color: rgba(255,255,255,0.92);
+  letter-spacing: 0;
+  padding: 6px 0;
+  transition: color 0.15s;
+  position: relative;
+}
+.nav-links a:hover { color: rgba(255,255,255,0.6); }
+.nav-right {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 16px;
+}
+.nav-dealer {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 400;
+  color: rgba(255,255,255,0.92);
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.nav-dealer:hover { background: rgba(255,255,255,0.06); }
+.nav-icon {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.9);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.15s;
+}
+.nav-icon:hover { background: rgba(255,255,255,0.06); }
+.nav-hamburger {
+  display: none;
+  flex-direction: column; gap: 5px;
+  margin-left: auto;
+  padding: 8px;
+  cursor: pointer;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 1.5px;
+  background: #fff;
+}
+
+/* ── HERO ── */
+#hero {
+  position: relative;
+  width: 100%;
+  height: calc((100vh - 340px) * 0.8);
+  min-height: 352px;
+  background: #000;
+  overflow: hidden;
+  padding-top: var(--nav-h);
+  display: flex;
+  align-items: center;
+}
+.hero-glow { display: none; }
+.hero-floor { display: none; }
+.hero-content {
+  position: relative; z-index: 3;
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+.hero-eyebrow {
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 18px;
+}
+.hero-title {
+  font-size: clamp(34px, 4.4vw, 60px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #fff;
+  max-width: 540px;
+  margin-bottom: 18px;
+}
+.hero-subtitle {
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.5;
+  max-width: 440px;
+  margin-bottom: 24px;
+}
+.hero-subtitle sup {
+  font-size: 0.65em;
+  vertical-align: super;
+  color: rgba(255,255,255,0.5);
+}
+.hero-actions {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.btn-pill {
+  display: inline-flex; align-items: center;
+  font-size: 14px; font-weight: 400;
+  padding: 10px 26px;
+  border-radius: 50px;
+  border: 1px solid rgba(255,255,255,0.85);
+  background: rgba(220,225,235,0.92);
+  color: #111;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.btn-pill:hover { background: #fff; }
+.btn-pill-dark {
+  display: inline-flex; align-items: center;
+  font-size: 14px; font-weight: 400;
+  padding: 10px 26px;
+  border-radius: 50px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: #121417;
+  color: #fff;
+  transition: background 0.18s, border-color 0.18s;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.btn-pill-dark:hover { background: #1d2024; border-color: rgba(255,255,255,0.3); }
+
+/* HERO PRODUCT IMAGES */
+.hero-products {
+  position: absolute;
+  bottom: 0;
+  right: 6%;
+  width: 62%;
+  z-index: 2;
+  display: flex; align-items: center; justify-content: flex-end;
+  pointer-events: none;
+  height: 92%;
+  padding: 0;
+}
+.hero-product {
+  position: relative;
+  height: 100%;
+  display: flex; align-items: flex-end;
+  filter: drop-shadow(0 30px 50px rgba(0,0,0,0.85));
+}
+.hero-product img {
+  height: 100%; width: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+.hero-product.left {
+  transform: translateY(6%) scale(0.78);
+  z-index: 1;
+  opacity: 0.9;
+}
+.hero-product.center {
+  z-index: 3;
+  transform: scale(1);
+}
+.hero-product.right {
+  transform: translateY(6%) scale(0.78);
+  z-index: 2;
+  opacity: 0.9;
+}
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  background: var(--dark);
+  border-top: 1px solid var(--line);
+  padding: 14px var(--pad);
+  position: relative;
+  z-index: 4;
+}
+.filter-bar-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: flex; align-items: center;
+  gap: 14px;
+}
+.filter-pills {
+  display: flex; gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: 1;
+}
+.filter-pills::-webkit-scrollbar { display: none; }
+.fpill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13.5px; font-weight: 400;
+  padding: 8px 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50px;
+  color: rgba(255,255,255,0.85);
+  background: transparent;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.fpill:hover { background: var(--pill-bg); }
+.fpill.active {
+  background: var(--pill-active);
+  border-color: rgba(255,255,255,0.5);
+  color: #fff;
+}
+.fpill svg { flex-shrink: 0; }
+
+/* ── PRODUCT CARDS ROW ── */
+.products-section {
+  background: var(--dark);
+  padding: 0 var(--pad) 24px;
+}
+.products-section-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+}
+.products-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0 18px;
+}
+.products-count {
+  font-size: 13px; color: rgba(255,255,255,0.55);
+}
+.products-nav {
+  display: flex; gap: 8px;
+}
+.pnav-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: rgba(255,255,255,0.8);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.pnav-btn:hover { background: var(--pill-bg); border-color: rgba(255,255,255,0.4); }
+.pnav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.cards-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  padding-bottom: 4px;
+}
+.cards-scroll::-webkit-scrollbar { display: none; }
+.pcard {
+  flex-shrink: 0;
+  width: 200px;
+  height: 220px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex; flex-direction: column;
+  position: relative;
+}
+.pcard:hover { background: var(--card-bg-hover); }
+.pcard-name {
+  padding: 14px 16px 0;
+  font-size: 14px; font-weight: 500;
+  color: #fff;
+  line-height: 1.3;
+}
+.pcard-img {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 8px 14px;
+  min-height: 90px;
+  overflow: hidden;
+}
+.pcard-img img {
+  max-width: 100%;
+  max-height: 100px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 14px rgba(0,0,0,0.5));
+  transition: transform 0.35s ease;
+}
+.pcard:hover .pcard-img img { transform: scale(1.05); }
+.pcard-bottom {
+  padding: 0 16px 14px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.pcard-count {
+  font-size: 12.5px; color: rgba(255,255,255,0.55);
+}
+.pcard-chevron {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.55);
+  transition: color 0.15s;
+}
+.pcard:hover .pcard-chevron { color: #fff; }
+
+/* ── SECTION DIVIDER STRIP ── */
+.section-strip {
+  background: var(--darker);
+  border-top: 1px solid var(--line);
+  padding: 18px var(--pad);
+}
+.strip-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: flex; align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+.strip-item { display: inline-flex; align-items: center; gap: 10px; }
+.strip-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+
+/* ── FEATURE STORYTELLING SECTIONS ── */
+.story {
+  background: var(--dark);
+  padding: clamp(80px, 10vw, 140px) var(--pad);
+}
+.story-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.story.reverse .story-inner { direction: rtl; }
+.story.reverse .story-inner > * { direction: ltr; }
+.story-eyebrow {
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 18px;
+}
+.story-title {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 22px;
+}
+.story-title-light { font-weight: 300; color: rgba(255,255,255,0.85); }
+.story-body {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.65);
+  max-width: 480px;
+  margin-bottom: 32px;
+}
+.story-img {
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4/5;
+  background: #111;
+}
+.story-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.story-img.contain {
+  background: linear-gradient(135deg, #1a1d24 0%, #0d0f14 100%);
+}
+.story-img.contain img {
+  object-fit: contain;
+  padding: 40px;
+}
+
+/* ── HIGHLIGHTS GRID ── */
+.highlights {
+  background: var(--darker);
+  padding: clamp(80px, 10vw, 140px) var(--pad);
+}
+.highlights-inner { max-width: var(--max); margin: 0 auto; }
+.highlights-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: end;
+  margin-bottom: 64px;
+}
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.hcard {
+  background: #131316;
+  border-radius: 16px;
+  padding: 40px 32px;
+  border: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+.hcard:hover { background: #18181c; border-color: var(--line-strong); transform: translateY(-2px); }
+.hcard-icon {
+  width: 44px; height: 44px;
+  margin-bottom: 28px;
+  color: rgba(255,255,255,0.95);
+}
+.hcard-num {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 14px;
+}
+.hcard-title {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin-bottom: 14px;
+  line-height: 1.3;
+}
+.hcard-body {
+  font-size: 14.5px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.55);
+  flex: 1;
+}
+
+/* ── CINEMATIC ── */
+.cinematic {
+  position: relative;
+  height: clamp(480px, 60vw, 720px);
+  overflow: hidden;
+  background: #0a0a0a;
+}
+.cinematic-bg {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.cinematic-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.15) 100%);
+}
+.cinematic-content {
+  position: relative; z-index: 2;
+  height: 100%;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 0 var(--pad);
+  max-width: var(--max);
+  margin: 0 auto;
+}
+.cinematic-content .story-eyebrow { color: rgba(255,255,255,0.55); }
+.cinematic-content .story-title { max-width: 580px; }
+.cinematic-content .story-body { max-width: 480px; color: rgba(255,255,255,0.75); }
+
+/* ── STATS ── */
+.stats {
+  background: var(--dark);
+  padding: 80px var(--pad);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.stats-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+.stat {
+  text-align: left;
+}
+.stat-num {
+  font-size: clamp(42px, 5vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.stat-label {
+  font-size: 13.5px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.5;
+}
+
+/* ── CTA BAND ── */
+.cta-band {
+  background: var(--dark);
+  padding: clamp(80px, 10vw, 120px) var(--pad);
+  text-align: center;
+}
+.cta-band-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.cta-band-eyebrow {
+  font-size: 12px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 22px;
+}
+.cta-band-title {
+  font-size: clamp(34px, 4.4vw, 56px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 22px;
+}
+.cta-band-body {
+  font-size: 16px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+  margin-bottom: 36px;
+  max-width: 540px;
+  margin-left: auto; margin-right: auto;
+}
+.cta-band-actions {
+  display: flex; gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: #050505;
+  padding: clamp(64px, 8vw, 96px) var(--pad) 0;
+  color: rgba(255,255,255,0.6);
+}
+.footer-inner { max-width: var(--max); margin: 0 auto; }
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid var(--line);
+}
+.footer-brand img { height: 38px; filter: brightness(0) invert(1); margin-bottom: 18px; }
+.footer-tagline {
+  font-size: 14px; font-weight: 400; line-height: 1.6;
+  color: rgba(255,255,255,0.4);
+  max-width: 280px;
+  margin-bottom: 28px;
+}
+.footer-socials { display: flex; gap: 12px; }
+.footer-socials a {
+  width: 36px; height: 36px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,0.6);
+  transition: border-color 0.15s, color 0.15s;
+}
+.footer-socials a:hover { border-color: rgba(255,255,255,0.6); color: #fff; }
+.footer-col-title {
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 18px;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-links a {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: #fff; }
+.footer-bottom {
+  padding: 26px 0;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 20px; flex-wrap: wrap;
+  font-size: 12.5px; color: rgba(255,255,255,0.3);
+}
+.footer-bottom-links { display: flex; gap: 22px; }
+.footer-bottom-links a {
+  font-size: 12.5px; color: rgba(255,255,255,0.3);
+  transition: color 0.15s;
+}
+.footer-bottom-links a:hover { color: rgba(255,255,255,0.7); }
+
+/* ── MOBILE DRAWER ── */
+.mobile-drawer {
+  position: fixed; inset: 0; z-index: 490;
+  background: var(--darker);
+  transform: translateX(100%);
+  transition: transform 0.36s cubic-bezier(0.4,0,0.2,1);
+  display: flex; flex-direction: column;
+  padding: calc(var(--nav-h) + 24px) 28px 40px;
+  overflow-y: auto;
+}
+.mobile-drawer.open { transform: translateX(0); }
+.mobile-nav-links {
+  display: flex; flex-direction: column;
+  border-top: 1px solid var(--line);
+  margin-top: 12px;
+}
+.mobile-nav-links a {
+  font-size: 22px; font-weight: 500;
+  color: #fff;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.mobile-nav-cta {
+  display: flex; flex-direction: column; gap: 12px;
+  margin-top: 32px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .highlights-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .footer-brand { grid-column: 1 / -1; }
+  .story-inner { grid-template-columns: 1fr; gap: 40px; }
+  .story-img { aspect-ratio: 16/10; }
+  .highlights-header { grid-template-columns: 1fr; gap: 24px; }
+  .hero-products { height: 42%; bottom: 14%; }
+}
+@media (max-width: 768px) {
+  .nav-links, .nav-dealer { display: none; }
+  .nav-hamburger { display: flex; }
+  .nav-right { gap: 4px; }
+  .hero-title { font-size: clamp(34px, 8vw, 56px); }
+  .hero-products { height: 36%; }
+  .stats-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .stats-inner { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; align-items: flex-start; }
+  .btn-pill, .btn-pill-dark { width: auto; }
+}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-1 { transition-delay: 0.08s; }
+.reveal-2 { transition-delay: 0.16s; }
+.reveal-3 { transition-delay: 0.24s; }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#"><img src="assets/logo.svg" alt="Lucid Corp"></a>
+    <div class="nav-links">
+      <a href="#products">Products</a>
+      <a href="#solutions">Solutions</a>
+      <a href="#owners">Partners</a>
+    </div>
+    <div class="nav-right">
+      <span class="nav-dealer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Find distributor
+      </span>
+      <div class="nav-icon" aria-label="Account">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div class="nav-hamburger" id="hamburger" onclick="toggleDrawer()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-nav-links">
+    <a href="#products" onclick="toggleDrawer()">Products <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a href="#solutions" onclick="toggleDrawer()">Solutions <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a href="#owners" onclick="toggleDrawer()">Partners <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a href="#" onclick="toggleDrawer()">Find distributor <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+  <div class="mobile-nav-cta">
+    <a class="btn-pill" style="justify-content:center;" href="#contact" onclick="toggleDrawer()">Request Sample</a>
+    <a class="btn-pill-dark" style="justify-content:center;" href="#" onclick="toggleDrawer()">Browse Products</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-floor"></div>
+
+  <div class="hero-content">
+    <h1 class="hero-title">Engineered Freshness. Lucid Tray Event.</h1>
+    <p class="hero-subtitle">Renewing partners get up to 12% rate reduction on the Lucid Infinity™ platform.<sup>1</sup></p>
+    <div class="hero-actions">
+      <a class="btn-pill" href="#offers">View Offers</a>
+      <a class="btn-pill-dark" href="#products">Browse Lineup</a>
+    </div>
+  </div>
+
+  <div class="hero-products">
+    <div class="hero-product center"><img src="assets/Dramatic Tray.png" alt="" loading="eager"></div>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-bar-inner">
+    <div class="filter-pills">
+      <button class="fpill active" data-filter="all">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        All products
+      </button>
+      <button class="fpill" data-filter="produce">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C9 5 7 9 7 13a5 5 0 0010 0c0-4-2-8-5-11z"/></svg>
+        Produce
+      </button>
+      <button class="fpill" data-filter="protein">Protein</button>
+      <button class="fpill" data-filter="cutfruit">Cut Fruit</button>
+      <button class="fpill" data-filter="seafood">Seafood</button>
+      <button class="fpill" data-filter="bakery">Bakery</button>
+      <button class="fpill" data-filter="foodservice">Food Service</button>
+      <button class="fpill" data-filter="infinity">Lucid Infinity™</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT CARDS ROW -->
+<section class="products-section" id="products">
+  <div class="products-section-inner">
+    <div class="products-meta">
+      <span class="products-count">12 products</span>
+      <div class="products-nav">
+        <button class="pnav-btn" id="scrollLeft" aria-label="Previous">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="pnav-btn" id="scrollRight" aria-label="Next">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="cards-scroll" id="cardsScroll">
+      <div class="pcard">
+        <p class="pcard-name">Lucid Produce</p>
+        <div class="pcard-img"><img src="assets/Every Category/tile2produce.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">4 sizes</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Protein</p>
+        <div class="pcard-img"><img src="assets/Every Category/tile1protein.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">3 sizes</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Cut Fruit</p>
+        <div class="pcard-img"><img src="assets/Every Category/tile3cutfruit.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">3 sizes</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Food Service</p>
+        <div class="pcard-img"><img src="assets/Every Category/tile4foodservice.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">2 sizes</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Seafood</p>
+        <div class="pcard-img"><img src="assets/Prawn-Topview.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">2 sizes</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Bakery</p>
+        <div class="pcard-img"><img src="assets/Bakery-Topview.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">3 sizes</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Berries</p>
+        <div class="pcard-img"><img src="assets/Berries-Topview.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">2 sizes</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Meat</p>
+        <div class="pcard-img"><img src="assets/Meat-Topview.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">3 sizes</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Tomato</p>
+        <div class="pcard-img"><img src="assets/Small-tomatoes-topview.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">2 sizes</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Infinity™</p>
+        <div class="pcard-img"><img src="assets/Tilt Tray/Main Tray.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">Platform</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Strawberry</p>
+        <div class="pcard-img"><img src="assets/Strawberries-topview.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">2 sizes</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <p class="pcard-name">Lucid Insert</p>
+        <div class="pcard-img"><img src="assets/Tilt Tray/Tray Insert.png" alt="" loading="lazy"></div>
+        <div class="pcard-bottom">
+          <span class="pcard-count">6 variants</span>
+          <span class="pcard-chevron">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="section-strip">
+  <div class="strip-inner">
+    <span class="strip-item"><span class="strip-dot"></span>Modified Atmosphere</span>
+    <span class="strip-item"><span class="strip-dot"></span>Extended Shelf Life</span>
+    <span class="strip-item"><span class="strip-dot"></span>100% Recyclable</span>
+    <span class="strip-item"><span class="strip-dot"></span>Modular Insert System</span>
+    <span class="strip-item"><span class="strip-dot"></span>Trusted by Leading Retailers</span>
+  </div>
+</div>
+
+<!-- STORY 1 -->
+<section class="story" id="solutions">
+  <div class="story-inner">
+    <div class="reveal">
+      <p class="story-eyebrow">Lucid Infinity™</p>
+      <h2 class="story-title">Form meets <span class="story-title-light">function.</span></h2>
+      <p class="story-body">The Lucid Infinity™ tray is engineered from the inside out. A precision-formed base pairs with our patented insert system to create the ideal microenvironment for every product category — locking in freshness, enhancing presentation, and streamlining the retail experience.</p>
+      <a class="btn-pill-dark" href="#">
+        Explore the technology
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:10px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+    <div class="story-img contain reveal reveal-1">
+      <img src="assets/Tilt Tray/Main Tray.png" alt="Lucid Infinity™ Tray">
+    </div>
+  </div>
+</section>
+
+<!-- CINEMATIC 1 -->
+<div class="cinematic">
+  <div class="cinematic-bg" style="background-image: url('assets/Hero Images/tray5.png'); background-color:#0a0a0a;"></div>
+  <div class="cinematic-overlay"></div>
+  <div class="cinematic-content reveal">
+    <p class="story-eyebrow">The difference</p>
+    <h2 class="story-title">Precision-engineered for <span class="story-title-light">peak freshness.</span></h2>
+    <p class="story-body">Our modified atmosphere technology creates the optimal gas environment inside every tray, dramatically slowing oxidation and microbial growth — so your product arrives looking as good as it left.</p>
+    <div>
+      <a class="btn-pill" href="#">Learn more</a>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat reveal">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Product categories<br>covered</div>
+    </div>
+    <div class="stat reveal reveal-1">
+      <div class="stat-num">3×</div>
+      <div class="stat-label">Extended shelf life vs.<br>standard packaging</div>
+    </div>
+    <div class="stat reveal reveal-2">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Recyclable materials<br>and components</div>
+    </div>
+    <div class="stat reveal reveal-3">
+      <div class="stat-num">12</div>
+      <div class="stat-label">Distinct tray products<br>in active production</div>
+    </div>
+  </div>
+</div>
+
+<!-- STORY 2 -->
+<section class="story reverse">
+  <div class="story-inner">
+    <div class="story-img contain reveal">
+      <img src="assets/Tilt Tray/Tray Insert.png" alt="Lucid Insert System">
+    </div>
+    <div class="reveal reveal-1">
+      <p class="story-eyebrow">Insert system</p>
+      <h2 class="story-title">One tray. <span class="story-title-light">Infinite configurations.</span></h2>
+      <p class="story-body">The modular insert system allows a single tray form to adapt across every product type. Swap inserts to change drainage, airflow, and cushioning — without changing your line setup. One SKU. Maximum flexibility.</p>
+      <a class="btn-pill-dark" href="#">
+        See insert options
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:10px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+<div class="highlights" id="owners">
+  <div class="highlights-inner">
+    <div class="highlights-header">
+      <div class="reveal">
+        <p class="story-eyebrow">Why Lucid Corp</p>
+        <h2 class="story-title">Built on three <span class="story-title-light">core principles.</span></h2>
+      </div>
+      <p class="story-body reveal reveal-1" style="max-width: 420px;">Every decision we make — material, form, performance — is guided by the same three commitments that have driven Lucid Corp from day one.</p>
+    </div>
+    <div class="highlights-grid">
+      <div class="hcard reveal">
+        <svg class="hcard-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="24" cy="24" r="18"/>
+          <path d="M14 28c2-4 5-6 10-6s8 2 10 6"/>
+          <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+          <circle cx="30" cy="20" r="1.5" fill="currentColor"/>
+        </svg>
+        <p class="hcard-num">01</p>
+        <h3 class="hcard-title">Superior Presentation</h3>
+        <p class="hcard-body">The tray is the first thing the consumer sees. We design every detail — geometry, material clarity, labeling surface — to make your product the hero at the point of purchase.</p>
+      </div>
+      <div class="hcard reveal reveal-1">
+        <svg class="hcard-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 36V20l12-8 12 8v16"/>
+          <rect x="19" y="26" width="10" height="10" rx="1"/>
+          <path d="M24 12v4"/>
+        </svg>
+        <p class="hcard-num">02</p>
+        <h3 class="hcard-title">Freshness Engineering</h3>
+        <p class="hcard-body">From barrier materials to insert drainage geometry, every component is selected for its role in the freshness system — minimizing waste and maximizing the quality window for retailers and consumers.</p>
+      </div>
+      <div class="hcard reveal reveal-2">
+        <svg class="hcard-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M24 8c8.8 0 16 7.2 16 16s-7.2 16-16 16S8 32.8 8 24"/>
+          <path d="M8 16l-4-4 4-4"/>
+          <path d="M20 24l3 3 6-6"/>
+        </svg>
+        <p class="hcard-num">03</p>
+        <h3 class="hcard-title">Circular by Design</h3>
+        <p class="hcard-body">We engineer for end-of-life from the very first sketch. Our trays are made from a single recyclable material family — no mixed-plastic lamination, no separation required at the recycling stream.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CINEMATIC 2 -->
+<div class="cinematic">
+  <div class="cinematic-bg" style="background-image: url('assets/Hero Images/tray10.png'); background-color:#0a0a0a;"></div>
+  <div class="cinematic-overlay" style="background: linear-gradient(to left, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.15) 100%);"></div>
+  <div class="cinematic-content reveal" style="align-items: flex-end; text-align: right;">
+    <p class="story-eyebrow">Industry partnership</p>
+    <h2 class="story-title" style="max-width:560px;">Trusted by leading retailers <span class="story-title-light">across North America.</span></h2>
+    <p class="story-body" style="margin-left: auto;">From national grocery chains to boutique food halls, the Lucid Infinity™ platform performs at every scale — with consistent quality, reliable lead times, and dedicated support.</p>
+    <div>
+      <a class="btn-pill" href="#">Become a partner</a>
+    </div>
+  </div>
+</div>
+
+<!-- CTA BAND -->
+<section class="cta-band" id="contact">
+  <div class="cta-band-inner">
+    <p class="cta-band-eyebrow">Get started</p>
+    <h2 class="cta-band-title">Ready to elevate <span class="story-title-light">your packaging?</span></h2>
+    <p class="cta-band-body">Request a sample of the Lucid Infinity™ platform, or talk with our team about a custom solution for your category.</p>
+    <div class="cta-band-actions">
+      <a class="btn-pill" href="#">Request a sample</a>
+      <a class="btn-pill-dark" href="#">Talk to sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/logo.svg" alt="Lucid Corp">
+        <p class="footer-tagline">Premium food packaging engineered for presentation, freshness, and a sustainable future.</p>
+        <div class="footer-socials">
+          <a href="#" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-title">Products</p>
+        <ul class="footer-links">
+          <li><a href="#">Lucid Produce</a></li>
+          <li><a href="#">Lucid Protein</a></li>
+          <li><a href="#">Lucid Cut Fruit</a></li>
+          <li><a href="#">Lucid Seafood</a></li>
+          <li><a href="#">Lucid Bakery</a></li>
+          <li><a href="#">Lucid Food Service</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Solutions</p>
+        <ul class="footer-links">
+          <li><a href="#">Lucid Infinity™</a></li>
+          <li><a href="#">Insert System</a></li>
+          <li><a href="#">Modified Atmosphere</a></li>
+          <li><a href="#">Materials</a></li>
+          <li><a href="#">Certifications</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Partners</p>
+        <ul class="footer-links">
+          <li><a href="#">Become a partner</a></li>
+          <li><a href="#">Find a distributor</a></li>
+          <li><a href="#">Partner portal</a></li>
+          <li><a href="#">Lead times</a></li>
+          <li><a href="#">Support</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Company</p>
+        <ul class="footer-links">
+          <li><a href="#">About Lucid Corp</a></li>
+          <li><a href="#">Sustainability</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">News</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Lucid Corp Inc. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Cookie Settings</a>
+        <a href="#">Accessibility</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// FILTER PILLS
+document.querySelectorAll('.fpill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.fpill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+
+// CARDS HORIZONTAL SCROLL CONTROLS
+const cardsScroll = document.getElementById('cardsScroll');
+const scrollAmount = 220;
+document.getElementById('scrollLeft').addEventListener('click', () => {
+  cardsScroll.scrollBy({ left: -scrollAmount * 2, behavior: 'smooth' });
+});
+document.getElementById('scrollRight').addEventListener('click', () => {
+  cardsScroll.scrollBy({ left: scrollAmount * 2, behavior: 'smooth' });
+});
+
+// MOBILE DRAWER
+let drawerOpen = false;
+function toggleDrawer() {
+  drawerOpen = !drawerOpen;
+  document.getElementById('mobileDrawer').classList.toggle('open', drawerOpen);
+  document.body.style.overflow = drawerOpen ? 'hidden' : '';
+}
+
+// REVEAL ON SCROLL
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>
